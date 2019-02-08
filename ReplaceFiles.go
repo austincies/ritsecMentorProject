@@ -11,4 +11,23 @@ type newFile struct {
 
 // Change the name of a fully replaced file
 func renameFile() {
+
+}
+
+// Make a web request to get the image
+func getImage(url string) os.File {
+	image := os.File{}
+	return image
+}
+
+// Scorch the original file
+func scorch(file os.File) {
+	for i := 0; i < 7; i++ { //scorch the file 7 times
+
+	}
+}
+
+// Replace the old file with the new image
+func replace() {
+
 }
