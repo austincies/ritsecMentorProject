@@ -16,7 +16,7 @@ var PICLINKS ["https://drive.google.com/a/g.rit.edu/file/d/1HUMdT8YL_nhmBniqahZe
 var PICNAMES ["jack_jack"]string
 
 // Create New File Location
-// @return: potential new directory filename
+// @return: potential new directory filename string
 func newPath(old string, new string) string {
 	lastSlash := -1
 	for i, symbol := range old {
