@@ -45,7 +45,7 @@ func renameFile(old string, new string) {
 	err := os.Rename(oldLocation, path)
 	if err != nil {
 		return
-	}
+	} // if failed return
 }
 
 // Make a web request to get the image
