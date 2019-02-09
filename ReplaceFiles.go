@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strings"
 )
 
 // List of image links, in order of name type, this will aid with renaming files
@@ -14,11 +15,34 @@ var PICLINKS ["https://drive.google.com/a/g.rit.edu/file/d/1HUMdT8YL_nhmBniqahZe
 // List of new file names, correspond to image link
 var PICNAMES ["jack_jack"]string
 
+// Create New File Location
+// @return: potential new directory filename
+func newPath(old string, new string) string {
+	lastSlash := -1
+	for i, symbol := range old {
+		if string(symbol) == "\\" || string(symbol) == "/" {
+			lastSlash = i
+		}
+	}
+	// Slices the string
+	newPath := make([]string, lastSlash)
+	// Join the []string into a string
+	newPathString := strings.Join(newPath, "")
+	// Concat the new file name to the directory
+	newPathString += new
+	return newPathString
+}
+
 // Change the name of a fully replaced file
 func renameFile(old string, new string) {
+	// Old Path
 	oldLocation := old
+	// New Image
 	newLocation := new
-	err := os.Rename(oldLocation, newLocation)
+	// Replace file
+	path := newPath(oldLocation, newLocation)
+	// Rename File
+	err := os.Rename(oldLocation, path)
 	if err != nil {
 		return
 	}
