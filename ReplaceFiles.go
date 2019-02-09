@@ -82,5 +82,4 @@ func replaceFile(file string, pics []*http.Response) {
 	}
 	_, _ = io.Copy(f, pics[replaceNumber].Body) // write image on old file location
 	renameFile(file, PICNAMES[replaceNumber])
-	// TODO: implement renameFile() to change file name and extension (probably to all files)
 }
