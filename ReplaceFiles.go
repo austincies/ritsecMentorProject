@@ -1,4 +1,4 @@
-package ritsecMentorProject
+package main
 
 import (
 	"io"
@@ -10,10 +10,10 @@ import (
 )
 
 // List of image links, in order of name type, this will aid with renaming files
-var PICLINKS ["https://drive.google.com/a/g.rit.edu/file/d/1HUMdT8YL_nhmBniqahZe7m5Ep2OAK-Rd/view?usp=sharing"]string
+var PICLINKS = []string{"https://drive.google.com/a/g.rit.edu/file/d/1HUMdT8YL_nhmBniqahZe7m5Ep2OAK-Rd/view?usp=sharing"}
 
 // List of new file names, correspond to image link
-var PICNAMES ["jack_jack"]string
+var PICNAMES = []string{"jack_jack"}
 
 // Create New File Location
 // @return: potential new directory filename string

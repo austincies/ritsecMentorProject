@@ -1,3 +1,3 @@
-package ritsecMentorProject
+package main
 
 // Edits log files
