@@ -5,51 +5,48 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"strings"
+	"path/filepath"
+	"time"
 )
 
 // List of image links, in order of name type, this will aid with renaming files
-var PICLINKS = []string{"https://drive.google.com/a/g.rit.edu/file/d/1HUMdT8YL_nhmBniqahZe7m5Ep2OAK-Rd/view?usp=sharing"}
+var PICLINKS = []string{
+	"https://i.imgur.com/gxMI91T.jpg",
+	"https://i.imgur.com/DdU55tp.jpg",
+}
 
 // List of new file names, correspond to image link
-var PICNAMES = []string{"jack_jack"}
+var PICNAMES = []string{
+	"ded.jpg",
+	"jack_jack.jpg",
+}
 
 // Create New File Location
-// @return: potential new directory filename string
+// @return: new (absolute)
 func newPath(old string, new string) string {
-	lastSlash := -1
-	for i, symbol := range old {
-		if string(symbol) == "\\" || string(symbol) == "/" {
-			lastSlash = i
-		}
-	}
-	// Slices the string
-	newPath := make([]string, lastSlash)
-	// Join the []string into a string
-	newPathString := strings.Join(newPath, "")
-	// Concat the new file name to the directory
-	newPathString += new
-	return newPathString
+	path := filepath.Dir(old) + "\\" + new // construct the correct new filepath
+	return path
 }
 
 // Change the name of a fully replaced file
 func renameFile(old string, new string) {
 	// Old Path
 	oldLocation := old
-	// New Image
-	newLocation := new
-	// Replace file
-	path := newPath(oldLocation, newLocation)
+	// New name for file
+	newName := new
+	// Fill out the filepath from existing path + new file name
+	path := newPath(oldLocation, newName)
 	// Rename File
 	err := os.Rename(oldLocation, path)
 	if err != nil {
+		print("error in renaming")
 		return
 	} // if failed return
 }
 
 // Make a web request to get the image
 func getImage(url string) *http.Response {
-	image, e := http.Get(url) // get image from remote repository
+	image, e := http.Get(url) // get image from URL
 	if e != nil {
 		return nil
 	} // if failed, return nil
@@ -60,6 +57,7 @@ func getImage(url string) *http.Response {
 func scorch(path string) {
 	info, err := os.Stat(path) // get length of file
 	if err != nil {
+		print("error retrieving file information (os.Stat)")
 		return
 	} // if not open, just return
 
@@ -72,12 +70,15 @@ func scorch(path string) {
 }
 
 // Replace the old file with the new image
-func replaceFile(file string, pics []*http.Response) {
-	scorch(file)                          // thoroughly overwrite file
-	replaceNumber := rand.Intn(len(pics)) // decide which image to replace file with
+func replaceFile(file string) {
+	scorch(file) // thoroughly overwrite file
 
-	body, _ := ioutil.ReadAll(pics[replaceNumber].Body)
+	rand.Seed(time.Now().UnixNano())
+	replaceNumber := rand.Intn(len(PICLINKS)) // decide which image to replace file with
 
-	_ = ioutil.WriteFile(file, body, 644) // write image on old file location
-	renameFile(file, PICNAMES[replaceNumber])
+	pic := getImage(PICLINKS[replaceNumber]) // pic := the resource at the given url
+	body, _ := ioutil.ReadAll(pic.Body)      // body := the data read from pic
+
+	_ = ioutil.WriteFile(file, body, 644)     // write image on old file location
+	renameFile(file, PICNAMES[replaceNumber]) // renames the file
 }
