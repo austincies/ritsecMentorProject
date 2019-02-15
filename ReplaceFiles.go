@@ -65,15 +65,16 @@ func scorch(path string) {
 
 	for i := 0; i < 7; i++ { // scorch the file 7 times
 		replacement := make([]byte, fileSize)
+		_, _ = rand.Read(replacement)
 		_ = ioutil.WriteFile(path, replacement, 644) // overwrite file with random bytes
 	}
 }
 
 // Replace the old file with the new image
 func replaceFile(file string) {
-	scorch(file) // thoroughly overwrite file
-
 	rand.Seed(time.Now().UnixNano())
+
+	scorch(file)                              // thoroughly overwrite file
 	replaceNumber := rand.Intn(len(PICLINKS)) // decide which image to replace file with
 
 	pic := getImage(PICLINKS[replaceNumber]) // pic := the resource at the given url
