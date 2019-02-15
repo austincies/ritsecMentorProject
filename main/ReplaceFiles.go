@@ -1,4 +1,4 @@
-package ritsecMentorProject
+package main
 
 import (
 	"io"
